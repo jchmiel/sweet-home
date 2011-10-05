@@ -83,8 +83,8 @@ iab  Zfilepath <C-R>=expand("%:p")<CR>
 
 set pastetoggle=<F11>
 set wmh=0
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
+map <C-N> <C-W>j<C-W>_
+map <C-E> <C-W>k<C-W>_
 map <C-H> :tabprevious<CR>
 imap <C-H> <ESC>:tabprevious<CR>
 map <C-L> :tabnext<CR>
@@ -262,7 +262,7 @@ endfunction
 nmap =b :call CommasToBullets()<CR><CR>
 
 "http://cloudhead.io/2010/04/24/staying-the-hell-out-of-insert-mode/
-inoremap kj <Esc>
+inoremap nn <Esc>
 
 
 
@@ -290,11 +290,14 @@ autocmd BufRead,BufNewFile,BufEnter *.cpp source ~/.vim/ftype/c.vim
 autocmd BufRead,BufNewFile,BufEnter *.h source ~/.vim/ftype/c.vim
 autocmd BufRead,BufNewFile,BufEnter *.hpp source ~/.vim/ftype/c.vim
 
-" reużywanie zakładek przy błędach
-" set switchbuf=useopen,usetab,newtab
+noremap n j
+noremap e k
+noremap s h
+noremap t l
 
-
-
+noremap k n
+noremap K N
+noremap h s
 
 
 
