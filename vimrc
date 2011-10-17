@@ -262,9 +262,6 @@ endfunction
 nmap =b :call CommasToBullets()<CR><CR>
 
 "http://cloudhead.io/2010/04/24/staying-the-hell-out-of-insert-mode/
-inoremap nn <Esc>
-
-
 
 set t_Co=256                                                                                                       
 autocmd VimEnter * :GuiColorScheme dw_green
