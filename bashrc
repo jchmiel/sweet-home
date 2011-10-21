@@ -35,6 +35,6 @@ if [ -e $HOME/bash ]; then
 	done
 fi
 
-
+setxkbmap -v colemak > /dev/null
 
 
