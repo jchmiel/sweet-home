@@ -3,3 +3,5 @@ iab  Zf for {<CR>}<Up><Right><Right><Right>
 iab  Zfi for i:= 0; i < ; i++ {<CR>}<Up><Right><Right><Right>
 iab  Zw for {<CR>}<Up><Right><Right><Right>
 iab  Zi if {<CR>}<Up><Right>
+iab  Zfu func {<CR>}<Up><Right><Right><Right><Right>
+iab  Zc type struct {<CR>}<Up><Right><Right><Right><Right>
