@@ -24,7 +24,7 @@ set shiftwidth=4                " dlugosc wciec
 set tabstop=4                   " ile znakow ma tab
 set softtabstop=4               " BS traktuje 4 spacje jak tab
 set scrolloff=3                 " ile linni przed koncem ekranu zaczynamy przewijanie = ile lini przed/po aktualniej zawsze widac
-"set listchars=tab:>-                " wyswietlaj tabulatory, w formacie ">---"
+set listchars=tab:>-                " wyswietlaj tabulatory, w formacie ">---"
 "set list                         wlacza to wyzej, mozna wywalic, to nie bedzie wyswietlac
 " set showbreak=>>                "  String to put at the start of lines that have been wrapped
 set nowrap                      " nie zawijaj wierszy
