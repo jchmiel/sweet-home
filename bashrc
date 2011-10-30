@@ -28,6 +28,14 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# Execute all scripts located in bash directory
+if [ -e bash ] ; then
+	for f in bash/* ; do
+		echo 'Executing' $f
+		. $f
+	done
+fi
+
 
 if [ -e $HOME/bash ]; then
 	for sc in $HOME/bash/* ; do

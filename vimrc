@@ -221,7 +221,7 @@ function! HelloWorld()
 	return "hello world"
 endfunction
 
-"inoremap <expr> <TAB> TabOrCompletion()
+inoremap <expr> <TAB> TabOrCompletion()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -262,6 +262,7 @@ endfunction
 nmap =b :call CommasToBullets()<CR><CR>
 
 "http://cloudhead.io/2010/04/24/staying-the-hell-out-of-insert-mode/
+" inoremap nn <Esc>
 
 set t_Co=256                                                                                                       
 autocmd VimEnter * :GuiColorScheme dw_green
@@ -292,9 +293,9 @@ noremap e k
 noremap s h
 noremap t l
 
-noremap k n
-noremap K N
-noremap h s
+nnoremap k n
+nnoremap K N
+nnoremap h s
 
 
 
