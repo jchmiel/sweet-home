@@ -1,4 +1,5 @@
-alias ll='ls -l'
+alias ll='ls -l --color=auto'
+alias ls='ls --color=auto'
 
 # po przeczytaniu artykulu na ubucentrum
 alias grep='grep --color=auto'
