@@ -83,12 +83,8 @@ iab  Zfilepath <C-R>=expand("%:p")<CR>
 
 set pastetoggle=<F11>
 set wmh=0
-map <C-N> <C-W>j<C-W>_
-map <C-E> <C-W>k<C-W>_
-map <C-H> :tabprevious<CR>
-imap <C-H> <ESC>:tabprevious<CR>
-map <C-L> :tabnext<CR>
-imap <C-L> <ESC>:tabnext<CR>
+map <C-K> <C-W>j<C-W>_
+map <C-H> <C-W>k<C-W>_
 map <C-C> <C-W>c
 "make + bledy
 nmap <F5> :cnext<CR>
@@ -287,14 +283,8 @@ autocmd BufRead,BufNewFile,BufEnter *.cpp source ~/.vim/ftype/c.vim
 autocmd BufRead,BufNewFile,BufEnter *.h source ~/.vim/ftype/c.vim
 autocmd BufRead,BufNewFile,BufEnter *.hpp source ~/.vim/ftype/c.vim
 
-noremap n j
-noremap e k
-noremap s h
-noremap t l
-
-noremap k n
-noremap K N
-noremap h s
-
-
-
+" Settings specific for colemak mode
+noremap h k
+noremap j h
+noremap k j
+vmap <BS> <Left>
