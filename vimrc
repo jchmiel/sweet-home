@@ -1,9 +1,7 @@
-" wersja oryginalna (silk)
 call pathogen#runtime_append_all_bundles() 
-filetype off
 filetype plugin indent on
 
-set nocompatible    " chcemy vim'a a nie vi
+set nocompatible
 
 set modelines=2
 
@@ -25,8 +23,8 @@ set tabstop=4                   " ile znakow ma tab
 set softtabstop=4               " BS traktuje 4 spacje jak tab
 set scrolloff=3                 " ile linni przed koncem ekranu zaczynamy przewijanie = ile lini przed/po aktualniej zawsze widac
 set listchars=tab:>-                " wyswietlaj tabulatory, w formacie ">---"
-"set list                         wlacza to wyzej, mozna wywalic, to nie bedzie wyswietlac
-" set showbreak=>>                "  String to put at the start of lines that have been wrapped
+set list                         "wlacza to wyzej, mozna wywalic, to nie bedzie wyswietlac
+set showbreak=>>                "  String to put at the start of lines that have been wrapped
 set nowrap                      " nie zawijaj wierszy
 set number                      " numery wierszy z lewej
 set showmatch                   " When a bracket is inserted, briefly jump to the matching one
@@ -43,6 +41,17 @@ set shortmess+=I
 
 set rulerformat=%l,%c%V%=#%n\ %3p%%         " Content of the ruler string
 set switchbuf=useopen,split  " Method of opening file in quickfix
+set shell=/bin/bash
+
+" Taken from http://bitbucket.org/sjl/dotfiles/src/tip/vim/
+" Backups {{{
+
+set backupdir=~/.vim/tmp/backup// " backups
+set directory=~/.vim/tmp/swap//   " swap files
+set backup                        " enable backups
+set noswapfile                    " It's 2011, Vim.
+
+" }}}
 
 
 syntax on                       " wlacza kolorowanie skladni
@@ -148,19 +157,13 @@ set dictionary+=~/.vim/dictionary/tex_dict
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-
 nnoremap v <C-V>
 nnoremap <C-V> v
 
 " Make BS/DEL work as expected in visual modes
 vmap <BS> x
 
-" Forward/back one file
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Execute current paragraph or visual block as Vimmish commands...
-
 vmap <silent> <C-E> :<C-U>'<,'>! cheddar<CR>
 " map <C-M> :%! headache<CR>
 map <silent> =e :call DemoCommand()<CR>
@@ -194,47 +197,7 @@ function! DemoCommand (...)
          sleep 1000m
      endif
 
-     " Restore previous match #1 state...
-     "if strlen(orig_match[0])
-     "    execute 'match ' . orig_match[0] . ' /' . orig_match[1] . '/'
-     "else
-     "    match none
-     "endif
 endfunction
-
-""" smart TAB, completes code or indents code *****************
-
-function! TabOrCompletion()
-	let c = col('.') - 1
-	if c==0 || getline('.')[c - 1] !~ '\k'
-		return "\<TAB>"
-	else
-		return "\<C-N>"
-	endif
-endfunction
-
-function! HelloWorld()
-	return "hello world"
-endfunction
-
-"inoremap <expr> <TAB> TabOrCompletion()
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""" display help in tabs *****************
-
-"augroup HelpInTabs
-"	au!
-"	au BufEnter *.txt if &buftype == 'help'
-"	au BufEnter *.txt    normal ^WT
-"	au BufEnter *.txt endif
-"	au BufEnter *.txt cmap hhh helpg
-"augroup END
-
-"seems to doesn't work :((
-
-"""""""""""""""""""""""""*****************
 
 function! CommasToBullets()
 perl <<END_PERL
@@ -247,19 +210,11 @@ perl <<END_PERL
 END_PERL
 endfunction
 
-"function! SwitchNERDTree()
-"	:NERDTreeToggle
-"endfunction
-"
-"function! SwitchTagList()
-"	:TlistToggle
-"endfunction
-
 nmap =b :call CommasToBullets()<CR><CR>
 
-"http://cloudhead.io/2010/04/24/staying-the-hell-out-of-insert-mode/
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set t_Co=256                                                                                                       
+set t_Co=256
 autocmd VimEnter * :GuiColorScheme dw_green
 
 " omni completion
