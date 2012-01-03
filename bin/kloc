@@ -7,4 +7,5 @@ else
 	dir=.
 fi
 
-find $dir -name '*.py' -o -name '*.cc' -o -name '*.c' -o -name '*.C' -o -name '*.go' -o -name '*.h' | xargs wc -l
+find $dir -name '*.py' -o -name '*.cc' -o -name '*.c' -o -name '*.C' \
+  -o -name '*.go' -o -name '*.h' -o -name '*.java' | xargs wc -l
