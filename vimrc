@@ -1,9 +1,7 @@
-call pathogen#runtime_append_all_bundles() 
+call pathogen#runtime_append_all_bundles()
 filetype plugin indent on
 
 set nocompatible
-
-set modelines=2
 
 set backspace=indent,eol,start  " BS kasuje wciecia, konce lini i cos tam jeszcze ;)
 
@@ -56,9 +54,6 @@ set noswapfile                    " It's 2011, Vim.
 
 syntax on                       " wlacza kolorowanie skladni
 set hlsearch                    " wlacza kolorowanie przy szukaniu
-"colorscheme elflord             " schemat kolorkow, jest tez duzo innych
-
-" wlacza automatyczne robienie wciec na podstawie typu pliku
 
 " dla plikow tekstowych wlacza zawijanie wiersz po 78 znaku
 autocmd FileType text setlocal textwidth=78
@@ -72,21 +67,11 @@ autocmd BufReadPost *
 " laduje plugin Man - "K" uruchamia man dla wyrazu pod kursorem
 source $VIMRUNTIME/ftplugin/man.vim
 
-" ***************
-"  Abbreviations
-" ***************
-"  Some C abbreviations
-iab  Zmain  int main(int argc, char *argv[])<CR>{<CR>}<Up><CR><CR>return 0;<Up>
-iab  Zinc  #include
-iab  Zdef  #define
 "  Some other abbreviations
 iab  Zdate  <C-R>=strftime("%y%m%d")<CR>
 iab  Ztime  <C-R>=strftime("%H:%M:%S")<CR>
 iab  Zfilename <C-R>=expand("%:t:r")<CR>
 iab  Zfilepath <C-R>=expand("%:p")<CR>
-" ***************
-"  Skroty
-" ***************
 
 " F11 wlacza i wylacza tryb paste
 
@@ -117,10 +102,6 @@ imap <F12> <ESC>:call SwitchMouse()<CR>
 map <F4> :set nu! <CR>
 map <F3> :set hls!<bar>set hls?<CR>
 :map gf <C-W><C-F><C-W>_
-
-" ***************
-"  Funkcje
-" ***************
 
 " function used to switch mouse on and off
 function SwitchMouse()
@@ -156,6 +137,7 @@ set dictionary+=~/.vim/dictionary/tex_dict
 " taken from Damien Conway, after OSCON2008 presentation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
+" <DCONWAY-OSCON2008>
 
 nnoremap v <C-V>
 nnoremap <C-V> v
@@ -212,14 +194,11 @@ endfunction
 
 nmap =b :call CommasToBullets()<CR><CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" </DCONWAY-OSCON2008>
 
+" make dw_green a colorcheme
 set t_Co=256
 autocmd VimEnter * :GuiColorScheme dw_green
-
-" omni completion
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 
 " file type specifics
 au BufRead,BufNewFile *.go set filetype=go
@@ -235,7 +214,7 @@ noremap k j
 vmap <BS> <Left>
 
 " Highlight extra whitespace
-highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
+"highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+"autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+"match ExtraWhitespace /\s\+$/
 
