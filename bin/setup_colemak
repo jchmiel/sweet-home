@@ -1,0 +1,2 @@
+setxkbmap -v colemak
+xset r 66
