@@ -268,20 +268,10 @@ autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 
 " file type specifics
 au BufRead,BufNewFile *.go set filetype=go
+
 autocmd BufNewFile  *.go	0r ~/.vim/skel/skeleton.go
-autocmd BufRead,BufNewFile,BufEnter *.go source ~/.vim/ftype/go.vim
-
 autocmd BufNewFile  *.py	0r ~/.vim/skel/skeleton.py
-autocmd BufRead,BufNewFile,BufEnter *.py source ~/.vim/ftype/py.vim
-
 autocmd BufNewFile  *.php	0r ~/.vim/skel/skeleton.php
-autocmd BufRead,BufNewFile,BufEnter *.php source ~/.vim/ftype/php.vim
-
-autocmd BufRead,BufNewFile,BufEnter *.c source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.cc source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.cpp source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.h source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.hpp source ~/.vim/ftype/c.vim
 
 " Settings specific for colemak mode
 noremap h k
