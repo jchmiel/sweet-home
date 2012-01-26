@@ -3,10 +3,24 @@
 " Some tricks taken from amix http://amix.dk/vim/vimrc.html
 " and http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
-call pathogen#runtime_append_all_bundles()
+set nocompatible " be iMproved
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
+
+" Load the  plugins.
+Bundle 'corntrace/bufexplorer'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'The-NERD-tree'
+Bundle 'ervandew/supertab'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
+
 filetype plugin on
 filetype indent on
-
 
 " Set map leader for mappings
 let mapleader = ","
@@ -46,7 +60,6 @@ set list                        "show listchars
 
 set backspace=indent,eol,start
 set mouse=a
-set nocompatible                " no VI compatibility
 set history=700
 set confirm                     " Ask for confirmation rather then refuse certain commands
 set history=500                 " Keep 50 lines of command line history
@@ -154,7 +167,7 @@ map <F3> :set hls!<bar>set hls?<CR>
 map <silent> <Leader>nt :NERDTreeToggle<CR>
 
 " function used to switch mouse on and off
-function SwitchMouse()
+function! SwitchMouse()
  if &mouse == "a"
   set mouse=
   echo "Mouse OFF"
