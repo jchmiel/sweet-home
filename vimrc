@@ -298,5 +298,3 @@ function! SpellLang()
 
   echo "language:" g:myLangList[b:myLang]
 endf
-
-"set statusline=%<%f%=%r%y%m\ %c\ %{fugitive#statusline()}\ %10(%l/%L%)
