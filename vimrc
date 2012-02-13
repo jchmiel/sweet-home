@@ -10,9 +10,12 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
+let g:gundo_map_move_older = "k"
+let g:gundo_map_move_newer = "h"
+
 " Load the  plugins.
-" Bundle 'FuzzyFinder'
-" Bundle 'L9'
+Bundle 'Command-T'
+Bundle 'Gundo'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'The-NERD-tree'
@@ -21,7 +24,6 @@ Bundle 'ervandew/supertab'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
-Bundle 'Command-T'
 
 filetype plugin on
 filetype indent on
@@ -38,8 +40,8 @@ let g:mapleader = ","
 " Easy motion sets far too many mappings. Move them to some key and
 " leave only useful ones with <Leader>.
 let g:EasyMotion_leader_key ='\'
-let g:EasyMotion_mapping_k = '<Leader>h'
-let g:EasyMotion_mapping_j = '<Leader>k'
+"let g:EasyMotion_mapping_k = '<Leader>h'
+"let g:EasyMotion_mapping_j = '<Leader>k'
 let g:EasyMotion_mapping_f = '<Leader>f'
 let g:EasyMotion_mapping_F = '<Leader>F'
 let g:EasyMotion_mapping_w = '<Leader>w'
@@ -50,11 +52,14 @@ let g:CommandTAcceptSelectionMap='<C-T>'
 let g:CommandTAcceptSelectionSplitMap='<C-S>'
 let g:CommandTCancelMap='<C-x>'
 
+" Leader mappings
 " Fast saving.
 nmap <leader>w :w!<cr>
-
 " Fast editing of the .vimrc.
-map <leader>e :e! ~/.vimrc<cr>
+map <leader>e :tabe! ~/.vimrc<cr>
+map <leader>u :GundoToggle<CR>
+
+
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source ~/.vimrc
 
@@ -101,7 +106,7 @@ set formatoptions-=l
 "set shortmess+=I                " Don't give the intro message when starting VIM
 
 set rulerformat=%l,%c%V%=#%n\ %3p%%         " Content of the ruler string
-set switchbuf=useopen,split  " Method of opening file in quickfix
+set switchbuf=usetab,newtab  " Method of opening file in quickfix
 set shell=/bin/bash
 
 " Backups
@@ -288,8 +293,12 @@ noremap h k
 noremap j h
 noremap k j
 vmap <BS> <Left>
-"noremap <C-K> <C-W>j<C-W>_
-"noremap <C-H> <C-W>k<C-W>_
+
+noremap <Leader>h <C-W>k
+noremap <Leader>k <C-W>j
+noremap <Leader>l <C-W>l
+noremap <Leader>j <C-W>h
+noremap <Leader><BS> <C-W>h
 "nnoremap <S-BS> <C-W>h<C-W>_
 "noremap <C-L> <C-W>l<C-W>_
 
@@ -331,8 +340,7 @@ if exists("+showtabline")
       let winnr = tabpagewinnr(i)
       let s .= '%' . i . 'T'
       let s .= (i == t ? '%1*' : '%2*')
-      let s .= i
-      let s .= ' %*'
+      let s .= '%*'
       let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
       let file = bufname(buflist[winnr - 1])
       let file = fnamemodify(file, ':p:t')
@@ -349,4 +357,3 @@ if exists("+showtabline")
   set stal=2
   set tabline=%!MyTabLine()
 endif
-
