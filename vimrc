@@ -1,8 +1,9 @@
-" Maintainer: jan "johnny" chmiel
+" Maintainer: Jan "johnny" Chmiel
 "
 " Some tricks taken from amix http://amix.dk/vim/vimrc.html
 " and http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
+" Startup vundle to manage plugins.
 set nocompatible " be iMproved
 filetype off
 set rtp+=~/.vim/bundle/vundle/
@@ -10,26 +11,44 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " Load the  plugins.
-Bundle 'corntrace/bufexplorer'
+" Bundle 'FuzzyFinder'
+" Bundle 'L9'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'The-NERD-tree'
+Bundle 'corntrace/bufexplorer'
 Bundle 'ervandew/supertab'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
+Bundle 'Command-T'
 
 filetype plugin on
 filetype indent on
 
+"Add custom plugins
+"Google plugin without optional settings.
+set rtp+=~/.vim/bundle.custom/google
+
 " Set map leader for mappings
 let mapleader = ","
 let g:mapleader = ","
+
 " Set leader for easymotion plugin.
-let g:EasyMotion_leader_key ='<Leader>'
+" Easy motion sets far too many mappings. Move them to some key and
+" leave only useful ones with <Leader>.
+let g:EasyMotion_leader_key ='\'
 let g:EasyMotion_mapping_k = '<Leader>h'
 let g:EasyMotion_mapping_j = '<Leader>k'
-map <leader>c <c+_>
+let g:EasyMotion_mapping_f = '<Leader>f'
+let g:EasyMotion_mapping_F = '<Leader>F'
+let g:EasyMotion_mapping_w = '<Leader>w'
+let g:EasyMotion_mapping_W = '<Leader>W'
+
+let g:CommandTAcceptSelectionTabMap='<CR>'
+let g:CommandTAcceptSelectionMap='<C-T>'
+let g:CommandTAcceptSelectionSplitMap='<C-S>'
+let g:CommandTCancelMap='<C-x>'
 
 " Fast saving.
 nmap <leader>w :w!<cr>
@@ -141,8 +160,6 @@ iab  Zfilepath <C-R>=expand("%:p")<CR>
 " F11 switches paste on and off
 set pastetoggle=<F11>
 set wmh=0
-map <C-K> <C-W>j<C-W>_
-map <C-H> <C-W>k<C-W>_
 map <C-C> <C-W>c
 "make + bledy
 nmap <F5> :cnext<CR>
@@ -271,16 +288,13 @@ noremap h k
 noremap j h
 noremap k j
 vmap <BS> <Left>
+"noremap <C-K> <C-W>j<C-W>_
+"noremap <C-H> <C-W>k<C-W>_
+"nnoremap <S-BS> <C-W>h<C-W>_
+"noremap <C-L> <C-W>l<C-W>_
 
-" Map arrows to window movements
-imap <Left> <C-W><Left>
-imap <Right> <C-W><Right>
-imap <Down> <C-W><Down>
-imap <Up> <C-W><Up>
-nmap <Left> <C-W><Left>
-nmap <Right> <C-W><Right>
-nmap <Down> <C-W><Down>
-nmap <Up> <C-W><Up>
+noremap <C-K> :tabn<CR>
+noremap <C-H> :tabp<CR>
 
 " A spell checker
 let g:myLangList = [ "nospell", "en_us" ]
@@ -298,3 +312,41 @@ function! SpellLang()
 
   echo "language:" g:myLangList[b:myLang]
 endf
+
+inoremap ` <Esc>
+
+set gdefault
+
+" Show tabline with tab number and directory.
+if exists("+guioptions")
+  set go-=e
+endif
+if exists("+showtabline")
+  function! MyTabLine()
+    let s = ''
+    let t = tabpagenr()
+    let i = 1
+    while i <= tabpagenr('$')
+      let buflist = tabpagebuflist(i)
+      let winnr = tabpagewinnr(i)
+      let s .= '%' . i . 'T'
+      let s .= (i == t ? '%1*' : '%2*')
+      let s .= i
+      let s .= ' %*'
+      let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+      let file = bufname(buflist[winnr - 1])
+      let file = fnamemodify(file, ':p:t')
+      if file == ''
+        let file = '[No Name]'
+      endif
+      let s .= file
+      let i = i + 1
+    endwhile
+    let s .= '%T%#TabLineFill#%='
+    let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+    return s
+  endfunction
+  set stal=2
+  set tabline=%!MyTabLine()
+endif
+
