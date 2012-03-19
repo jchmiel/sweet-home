@@ -69,7 +69,7 @@ zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
 
 setopt autocd
 
-# Execute everything in .zsh directory
+# Execute everything in .zsh directory.
 if [ -e $HOME/.zsh ]; then
   for sc in $HOME/.zsh/* ; do
     . $sc
