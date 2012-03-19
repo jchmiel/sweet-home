@@ -3,8 +3,11 @@
 " Some tricks taken from amix http://amix.dk/vim/vimrc.html
 " and http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
+source ~/.minimal.vimrc
+" Clear colorscheme set in minimal.vimrc
+highlight clear
+
 " Startup vundle to manage plugins.
-set nocompatible " be iMproved
 filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -15,81 +18,61 @@ let g:gundo_map_move_newer = "h"
 
 " Load the  plugins.
 Bundle 'Command-T'
+Bundle 'corntrace/bufexplorer'
+Bundle 'ervandew/supertab'
 Bundle 'Gundo'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Lokaltog/vim-powerline'
-Bundle 'The-NERD-tree'
-Bundle 'corntrace/bufexplorer'
-Bundle 'ervandew/supertab'
 Bundle 'scrooloose/nerdcommenter'
+Bundle 'The-NERD-tree'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
+Bundle 'wgibbs/vim-irblack'
 
 filetype plugin on
 filetype indent on
 
 "Add custom plugins
-"Google plugin without optional settings.
-set rtp+=~/.vim/bundle.custom/google
-
-" Set map leader for mappings
-let mapleader = ","
-let g:mapleader = ","
+set rtp+=~/.vim/custom.bundle/\*
 
 " Set leader for easymotion plugin.
 " Easy motion sets far too many mappings. Move them to some key and
 " leave only useful ones with <Leader>.
-let g:EasyMotion_leader_key ='\'
-"let g:EasyMotion_mapping_k = '<Leader>h'
-"let g:EasyMotion_mapping_j = '<Leader>k'
-let g:EasyMotion_mapping_f = '<Leader>f'
-let g:EasyMotion_mapping_F = '<Leader>F'
-let g:EasyMotion_mapping_w = '<Leader>w'
-let g:EasyMotion_mapping_W = '<Leader>W'
+let g:EasyMotion_leader_key ='<Space>'
+let g:EasyMotion_mapping_k = '<Space>h'
+let g:EasyMotion_mapping_j = '<Space>k'
+let g:EasyMotion_mapping_f = '<Space>f'
+let g:EasyMotion_mapping_F = '<Space>F'
+let g:EasyMotion_mapping_w = '<Space>w'
+let g:EasyMotion_mapping_W = '<Space>W'
 
 let g:CommandTAcceptSelectionTabMap='<CR>'
-let g:CommandTAcceptSelectionMap='<C-T>'
-let g:CommandTAcceptSelectionSplitMap='<C-S>'
-let g:CommandTCancelMap='<C-x>'
+let g:CommandTAcceptSelectionMap='<Space>'
+let g:CommandTAcceptSelectionSplitMap='<C-w>'
+let g:CommandTCancelMap=['<ESC>', '`']
+let g:CommandTSelectPrevMap=['<C-TAB>', '<C-p>']
+let g:CommandTSelectNextMap=['<TAB>', '<C-n>']
+let g:CommandTToggleFocusMap='<C-f>'
+let g:CommandTMaxFiles=20000
 
 " Leader mappings
 " Fast saving.
-nmap <leader>w :w!<cr>
+nmap <Leader>w :w!<cr>
 " Fast editing of the .vimrc.
-map <leader>e :tabe! ~/.vimrc<cr>
-map <leader>u :GundoToggle<CR>
-
+map <Leader>v :tabe! ~/.vimrc<cr>
+map <Leader>u :GundoToggle<CR>
 
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source ~/.vimrc
 
-" Use TABS only and shift by 4 characters
-set noexpandtab
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4
-
-" Indentation
-set smartindent
-set autoindent
-
-" Syntax highlighting and highlight for search
-syntax on
-set hlsearch
-set incsearch
-
-" Show TABS in a special way
-set listchars=tab:>-            " show TABS as ">---"
-set list                        "show listchars
 
 set backspace=indent,eol,start
 set mouse=a
-set history=700
 set confirm                     " Ask for confirmation rather then refuse certain commands
 set history=500                 " Keep 50 lines of command line history
 set ruler                       " Show the cursor position all the time
 set showcmd                     " Display incomplete commands
-set scrolloff=7                 " Scrolling margin
+set scrolloff=3                 " Scrolling margin
 set showbreak=>>                " String to put at the start of lines that have been wrapped
 set nowrap                      " Don't wrap
 set number                      " Line numbers are useful
@@ -113,8 +96,6 @@ set shell=/bin/bash
 set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap//   " swap files
 set backup                        " enable backups
-set noswapfile                    " It's 2011, Vim.
-
 
 autocmd FileType text setlocal textwidth=80
 
@@ -156,16 +137,9 @@ function! VisualSearch(direction) range
     let @" = l:saved_reg
 endfunction
 
-"  Some other abbreviations
-iab  Zdate  <C-R>=strftime("%y%m%d")<CR>
-iab  Ztime  <C-R>=strftime("%H:%M:%S")<CR>
-iab  Zfilename <C-R>=expand("%:t:r")<CR>
-iab  Zfilepath <C-R>=expand("%:p")<CR>
-
 " F11 switches paste on and off
 set pastetoggle=<F11>
 set wmh=0
-map <C-C> <C-W>c
 "make + bledy
 nmap <F5> :cnext<CR>
 imap <F5> <ESC>:cnext<CR>
@@ -180,8 +154,6 @@ map <F8> :Make -j4<CR>
 
 map  <silent> <F10> :TlistToggle<CR>
 imap <silent> <F10> <ESC>:TalistToggle<CR>
-" nmap <F12> :call SwitchPaste()<CR>
-" imap <F12> <ESC>:call SwitchPaste()<CR>
 nmap <F12> :call SwitchMouse()<CR>
 imap <F12> <ESC>:call SwitchMouse()<CR>
 map <F4> :set nu! <CR>
@@ -208,7 +180,7 @@ function! s:insert_gates()
     execute "normal Go#endif /* " . gatename . " */"
     normal kk
 endfunction
-autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates() 
+autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates()
 
 " appropiate MAN pages
 " if we are in C/C++ file set browsed man sections to useful for programmist,
@@ -216,29 +188,19 @@ autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates()
 autocmd FileType c,cpp  let $MANSECT="2:3:7:4"
 autocmd FileType sh,csh let $MANSECT="1:5:8:4"
 
-set tags+=~/.vim/systags
-set dictionary+=~/.vim/dictionary/tex_dict
-
-" taken from Damien Conway, after OSCON2008 presentation
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap v <C-V>
-nnoremap <C-V> v
-
-" Make BS/DEL work as expected in visual modes
-vmap <BS> x
-
-" Execute current paragraph or visual block as Vimmish commands...
 vmap <silent> <C-E> :<C-U>'<,'>! cheddar<CR>
 " map <C-M> :%! headache<CR>
-map <silent> =e :call DemoCommand()<CR>
-vmap <silent> =e :<C-U>call DemoCommand(1)<CR>
+" Execute current paragraph or visual block as Vimmish commands...
+map <silent> <Leader>e :call DemoCommand(1)<CR>
+vmap <silent> <Leader>e :<C-U>call DemoCommand(1)<CR>
 
-highlight WHITE_ON_RED    ctermfg=white  ctermbg=red
+highlight link ERROR_COLOR Error
 
 function! DemoCommand (...)
      " Cache current state info...
      let orig_buffer = getline('w0','w$')
      let orig_match  = matcharg(1)
+     set nolazyredraw
 
      " Grab either visual blocj (if a:0) or else current para...
      if a:0
@@ -247,20 +209,26 @@ function! DemoCommand (...)
          silent normal vipy
      endif
 
-     " Highlight the selected text using match #1...
-     "match WHITE_ON_RED /\%V/
-     redraw
-     sleep 500m
+     " Highlight the selection in red to give feedback...
+    let matchid = matchadd('ERROR_COLOR','\%V')
+    redraw
+    sleep 500m
 
-     " Join up \-continued lines...
-     execute substitute(@@, '\n\s*\\', ' ', 'g')
+    " Remove continuations and convert shell commands, then execute...
+    let command = @@
+    let command = substitute(command, '^\s*".\{-}\n', '', 'g')
+    let command = substitute(command, '\n\s*\\', ' ', 'g')
+    let command = substitute(command, '^\s*>\s', ':! ', '' )
+    execute command
 
-     " Redraw if screen got messed up...
-     if getline('w0','w$') != orig_buffer
-         redraw
-         sleep 1000m
-     endif
+    " If the buffer changed, hold the highlighting an extra second...
+    if getline('w0','w$') != orig_buffer
+        redraw
+        sleep 1000m
+    endif
 
+    " Remove the highlighting...
+    call matchdelete(matchid)
 endfunction
 
 function! CommasToBullets()
@@ -288,22 +256,7 @@ autocmd BufNewFile  *.go	0r ~/.vim/skel/skeleton.go
 autocmd BufNewFile  *.py	0r ~/.vim/skel/skeleton.py
 autocmd BufNewFile  *.php	0r ~/.vim/skel/skeleton.php
 
-" For colemak keyboard
-noremap h k
-noremap j h
-noremap k j
-vmap <BS> <Left>
-
-noremap <Leader>h <C-W>k
-noremap <Leader>k <C-W>j
-noremap <Leader>l <C-W>l
-noremap <Leader>j <C-W>h
-noremap <Leader><BS> <C-W>h
-"nnoremap <S-BS> <C-W>h<C-W>_
-"noremap <C-L> <C-W>l<C-W>_
-
-noremap <C-K> :tabn<CR>
-noremap <C-H> :tabp<CR>
+au VimLeave * mksession ~/.vimsession
 
 " A spell checker
 let g:myLangList = [ "nospell", "en_us" ]
@@ -322,11 +275,10 @@ function! SpellLang()
   echo "language:" g:myLangList[b:myLang]
 endf
 
-inoremap ` <Esc>
-
+" Add g as default to all :s commands.
 set gdefault
 
-" Show tabline with tab number and directory.
+" Show tabline with tab number, skip directory
 if exists("+guioptions")
   set go-=e
 endif
@@ -342,6 +294,7 @@ if exists("+showtabline")
       let s .= (i == t ? '%1*' : '%2*')
       let s .= '%*'
       let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+      let s .= ' '
       let file = bufname(buflist[winnr - 1])
       let file = fnamemodify(file, ':p:t')
       if file == ''
@@ -357,3 +310,19 @@ if exists("+showtabline")
   set stal=2
   set tabline=%!MyTabLine()
 endif
+
+" Keep number column as small as possible.
+set numberwidth=1
+
+" Nice menu for completions above command line.
+set wildmenu
+nm ,o :tabe 
+
+"cnoremap <silent> <Esc> <C-F>
+"cnoremap <silent> <`> <C-F>
+
+" Map these to something more practical.
+noremap '' ``
+noremap Y y$
+noremap Q @q
+
