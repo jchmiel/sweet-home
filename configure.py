@@ -1,127 +1,145 @@
 #!/usr/bin/env python
-import logging, os
-import shutil, time
+import configparser
+import glob
+import hashlib
+import logging
+import optparse
+import os
+import time
 
-FILELIST_FILE='filelist'
+
+DEF_CONFIG_FILE='configure.conf'
+
+
+class Colors:
+  HEADER = '\033[95m'
+  OKBLUE = '\033[94m'
+  OKGREEN = '\033[92m'
+  WARNING = '\033[93m'
+  FAIL = '\033[91m'
+  ENDC = '\033[0m'
+
+
+class Error(Exception):
+  pass
+
+
+class PathToLink:
+  def __init__(self, path, dest_path):
+    self.path = path
+    self.dest_path = dest_path
+
 
 class Configurer:
-  def __init__(self, fileListPath):
-    self.fileListPath = fileListPath
+
+  def __init__(self, config_file, target_dir=None):
+    self.config_file = config_file
+    self.target_dir = target_dir
 
   def run(self):
-    self.findHomeDirectory()
-    self.makeBackupDir()
-    fileList = self.parseFileList(self.fileListPath)
-    self.linkFiles(fileList, homeDirectory)
+    self._fill_target_dir_if_needed()
+    path_list = self._parse_configfile()
+    self._check_paths(path_list)
+    backup_dir = self._make_backup_dir()
+    self._link_paths(path_list, backup_dir)
 
-  def makeBackupDir(self):
-    # Make a backup directory.
-    bak = os.path.join(self.homeDirectory, '.sweet-home')
-    if not os.path.exists(bak):
-      os.mkdir(bak)
-    tm = time.localtime()
-    bak = os.path.join(self.homeDirectory, '.sweet-home', "backup-%04d%02d%02d%02d%02d" % (tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min))
-    if not os.path.exists(bak):
-      os.mkdir(bak)
-    self.bakDir = bak
+  def _check_paths(self, path_list):
+    if not os.path.exists(self.target_dir):
+      raise Error('Target dir %s doesn\'t exist' % self.target_dir)
+    for entry in path_list:
+      if not os.path.exists(entry.path):
+        raise Error('Path %s doesn\'t exist' % entry.path)
 
-  def parseFileList(self, fileName):
-    f = open(fileName)
-    fileList = []
-    for l in f:
-      if not l.strip():
-        continue # skip empty lines
-      t = l.strip()
-      if t.find('\t') >= 0:
-        arr = t.split('\t')
-        if not (arr[0].strip() and arr[1].strip()):
-          logging.warn("Empty entries '%s' and '%s'" % (arr[0], arr[1]))
-          continue
-        fileList.append( (arr[0], arr[1]) )
-      else:
-        if not t.strip():
-          logging.warn("Empty entry '%s'" % t)
-          continue
-        fileList.append( (t, t) )
-    f.close()
-    return fileList
-
-  def linkFiles(self, copyList, destDir):
-    for e in copyList:
-      curDir = os.getenv('PWD')
-      if not curDir:
-        raise Exception('Cannot find current directory')
-      src = os.path.join(curDir, e[0])
-      dest = os.path.join(destDir, e[1])
-      if not self.prepareDestPath(dest):
+  def _link_paths(self, path_list, backup_dir):
+    print('%sLinking paths...%s' % (Colors.OKBLUE,  Colors.ENDC))
+    backups = []
+    for entry in path_list:
+      dest_path = os.path.join(self.target_dir, entry.dest_path)
+      if os.path.islink(dest_path):
+        print('Path %s is a link, skipping.' % dest_path)
         continue
-      self.makeLink(src, dest)
+      if self._backup_path_if_needed(entry.dest_path, backup_dir):
+        backups.append(entry.dest_path)
+      self._make_parent_dir(dest_path)
+      self._symlink(entry.path, dest_path)
+      print(entry.path)
+    if backups:
+      print('Paths backed up to %s are %s.' % (backup_dir, ','.join(backups)))
+    print('%sAll done.%s' % (Colors.OKGREEN,  Colors.ENDC))
 
-  def prepareDestPath(self, dest):
-    if os.path.exists(dest):
-      msg = '%s already exists overwrite (yes/no) ? [y/n]' % dest
-      ans = self.getUserOption(msg, ('y', 'n'))
-      if ans == 'n':
-        return False
-      self.backupPath(dest)
-      self.rmPath(dest)
-    return True
+  def _symlink(self, src, dest):
+    os.symlink(os.path.abspath(src),
+               os.path.abspath(dest))
 
-  def backupPath(self, path):
-    assert self.homeDirectory
-    assert self.bakDir
-    homeRel = os.path.relpath(path, self.homeDirectory)
-    dest = os.path.join(self.bakDir, homeRel)
+  def _make_parent_dir(self, path):
+    dirname = os.path.dirname(path)
+    self._mkdir(dirname)
 
-    src = path
-    print 'Backuping %s to %s' % (src, dest)
-    if os.path.isdir(src):
-      shutil.copytree(src, dest, True)
-    elif os.path.isfile(src):
-      # make sure path exists
-      if not os.path.exists(os.path.dirname(dest)):
-        os.makedirs(os.path.dirname(dest))
-      shutil.copy(src, dest)
-    return True
-
-  def getUserOption(self, msg, options):
-    while 1:
-      ans = raw_input(msg)
-      if ans and ans[0] in options:
-        break
-      print 'Please respond !', options
-    return ans[0]
-
-  def rmPath(self, path):
+  def _mkdir(self, path):
     if os.path.isdir(path):
-      shutil.rmtree(path)
-    elif os.path.isfile(path):
-      os.remove(path)
+      return
+    if os.path.isfile(path):
+      raise Error('Cannot create path %s, already exists' % path)
+    head, tail = os.path.split(path)
+    self._mkdir(head)
+    os.mkdir(path)
 
-  def makeLink(self, src, dest):
-    #logging.info('linking %s to %s' % (src, dest))
-    if os.path.isdir(src) or os.path.isfile(src):
-      d, f = os.path.split(dest)
-      if not os.path.isdir(d):
-        cmd = 'mkdir -p %s' % d
-        print cmd
-        os.system(cmd)
-      cmd = 'ln -s %s %s' % (src, dest)
-      print cmd
-      os.system(cmd)
-    else:
-      logging.warn('entry %s is neither file nor directory' % e[0])
+  def _backup_path_if_needed(self, path, backup_dir):
+    src = os.path.join(self.target_dir, path)
+    if not os.path.exists(src):
+      return False
+    dest = os.path.join(backup_dir, path)
+    os.rename(src, dest)
+    return True
 
-  def findHomeDirectory(self):
-    homeDirectory = os.getenv('HOME')
-    logging.info('HOME is %s' % homeDirectory)
+  def _parse_configfile(self):
+    config = configparser.RawConfigParser()
+    config.read(self.config_file)
+    path_list = []
+    dotfiles = config.get('main', 'dotfiles')
+    patterns = dotfiles.split(' ')
+    for p in patterns:
+      for f in glob.glob(p):
+        path_list.append(PathToLink(f,'.'+f))
+
+    files = config.get('main', 'files')
+    patterns = files.split(' ')
+    for p in patterns:
+      for f in glob.glob(p):
+        path_list.append(PathToLink(f,f))
+    return path_list
+
+  def _make_backup_dir(self):
+    dirname=hashlib.md5(str(time.time()).encode('utf-8')).hexdigest()
+    backup_dir = os.path.join(self.target_dir, '.sweet-home')
+    if not os.path.exists(backup_dir):
+      os.mkdir(backup_dir)
+    backup_dir = os.path.join(backup_dir, dirname)
+    if not os.path.exists(backup_dir):
+      os.mkdir(backup_dir)
+    return backup_dir
+
+  def _fill_target_dir_if_needed(self):
+    if not self.target_dir:
+      self.target_dir = os.getenv('HOME')
+
 
 def main():
+  parser = optparse.OptionParser()
+  parser.add_option(
+      "-t", "--target_dir", dest="target_dir", default=None, metavar='TARGET',
+      help="Install all files to TARGET dir (default is user's home).")
+  parser.add_option(
+      "-c", "--config_file", dest="config_file", default=DEF_CONFIG_FILE,
+      help="Use specified config file")
+  opts, args = parser.parse_args()
+
   FORMAT = "%(levelname)s: %(message)s"
   logging.basicConfig(format=FORMAT, level=logging.DEBUG)
+  confgurer = Configurer(
+      config_file=opts.config_file, target_dir=opts.target_dir)
+  confgurer.run()
 
-  Configurer conf = Configurer(FILELIST_FILE)
-  conf.run()
 
 if __name__ == '__main__':
   main()

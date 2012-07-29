@@ -231,7 +231,7 @@ function! DemoCommand (...)
     call matchdelete(matchid)
 endfunction
 
-unction! CommasToBullets()
+function! CommasToBullets()
 perl <<END_PERL
   ($line) = $curwin->Cursor;
   $curbuf->Append($line, map "\t* $_",

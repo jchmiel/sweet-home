@@ -1,5 +1,6 @@
 alias ll='ls -l --color=auto'
 alias ls='ls --color=auto'
+alias l='ls --color=auto'
 
 # Nice ubuntu aliases.
 alias aptfs='apt-file search'
