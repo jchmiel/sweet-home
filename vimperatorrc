@@ -1,0 +1,5 @@
+noremap k j
+noremap h k
+map <c-k> <c-n>
+map <c-h> <c-p>
+map x d
