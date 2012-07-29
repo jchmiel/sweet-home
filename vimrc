@@ -1,124 +1,167 @@
-" wersja oryginalna (silk)
-call pathogen#runtime_append_all_bundles() 
+" Maintainer: Jan "johnny" Chmiel
+"
+" Some tricks taken from amix http://amix.dk/vim/vimrc.html
+" and http://bitbucket.org/sjl/dotfiles/src/tip/vim/
+
+source ~/.minimal.vimrc
+" Clear colorscheme set in minimal.vimrc
+highlight clear
+
+" Startup vundle to manage plugins.
 filetype off
-filetype plugin indent on
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
 
-set nocompatible    " chcemy vim'a a nie vi
+let g:gundo_map_move_older = "k"
+let g:gundo_map_move_newer = "h"
 
-set modelines=2
+" Load the  plugins.
+Bundle 'Command-T'
+Bundle 'corntrace/bufexplorer'
+Bundle 'ervandew/supertab'
+Bundle 'Gundo'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'The-NERD-tree'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
+Bundle 'wgibbs/vim-irblack'
 
-set backspace=indent,eol,start  " BS kasuje wciecia, konce lini i cos tam jeszcze ;)
+filetype plugin on
+filetype indent on
 
-set mouse=a                     " oczywisice myszka jest uzyteczna
+"Add custom plugins
+set rtp+=~/.vim/custom.bundle/\*
 
+" Set leader for easymotion plugin.
+" Easy motion sets far too many mappings. Move them to some key and
+" leave only useful ones with <Leader>.
+let g:EasyMotion_leader_key ='<Space>'
+let g:EasyMotion_mapping_k = '<Space>h'
+let g:EasyMotion_mapping_j = '<Space>k'
+let g:EasyMotion_mapping_f = '<Space>f'
+let g:EasyMotion_mapping_F = '<Space>F'
+let g:EasyMotion_mapping_w = '<Space>w'
+let g:EasyMotion_mapping_W = '<Space>W'
+
+let g:CommandTAcceptSelectionTabMap='<CR>'
+let g:CommandTAcceptSelectionMap='<Space>'
+let g:CommandTAcceptSelectionSplitMap='<C-w>'
+let g:CommandTCancelMap=['<ESC>', '`']
+let g:CommandTSelectPrevMap=['<C-TAB>', '<C-p>']
+let g:CommandTSelectNextMap=['<TAB>', '<C-n>']
+let g:CommandTToggleFocusMap='<C-f>'
+let g:CommandTMaxFiles=20000
+
+" Leader mappings
+" Fast saving.
+nmap <Leader>w :w!<cr>
+" Fast editing of the .vimrc.
+map <Leader>v :tabe! ~/.vimrc<cr>
+map <Leader>u :GundoToggle<CR>
+
+" When vimrc is edited, reload it
+autocmd! bufwritepost vimrc source ~/.vimrc
+
+
+set backspace=indent,eol,start
+set mouse=a
 set confirm                     " Ask for confirmation rather then refuse certain commands
-set smartindent                  " always set smartindenting on
-set autoindent
-set nobackup                    " do not keep a backup file, use versions instead
-set history=50                  " keep 50 lines of command line history
-set ruler                       " show the cursor position all the time
-set showcmd                     " display incomplete commands
-set incsearch                   " do incremental searching
-set noexpandtab                   " spacje zamiast tabow
-set shiftwidth=4                " dlugosc wciec
-set tabstop=4                   " ile znakow ma tab
-set softtabstop=4               " BS traktuje 4 spacje jak tab
-set scrolloff=3                 " ile linni przed koncem ekranu zaczynamy przewijanie = ile lini przed/po aktualniej zawsze widac
-set listchars=tab:>-                " wyswietlaj tabulatory, w formacie ">---"
-"set list                         wlacza to wyzej, mozna wywalic, to nie bedzie wyswietlac
-" set showbreak=>>                "  String to put at the start of lines that have been wrapped
-set nowrap                      " nie zawijaj wierszy
-set number                      " numery wierszy z lewej
+set history=500                 " Keep 50 lines of command line history
+set ruler                       " Show the cursor position all the time
+set showcmd                     " Display incomplete commands
+set scrolloff=3                 " Scrolling margin
+set showbreak=>>                " String to put at the start of lines that have been wrapped
+set nowrap                      " Don't wrap
+set number                      " Line numbers are useful
 set showmatch                   " When a bracket is inserted, briefly jump to the matching one
-set foldenable                  " umozlwia zwijanie (folding)
-set splitbelow                  "  Create new window below current one
-set previewheight=6                 " wysokosc okienka do podgladu
-set title                       " wstawia nazwe edytowanego pliku do nazwy okna (xterm, putty, etc.)
+set foldenable                  " Make folding possible
+set splitbelow                  " Create new window below current one
+set previewheight=6             " Height of the quickfix window
+set title                       " Puts name of edited file into window title (xterm, putty, etc.)
 
-set lazyredraw                  "  Don't update screen while executing macros
-set laststatus=2                "  Always show statusbar
+set lazyredraw                  " Don't update screen while executing macros
+set laststatus=2                " Always show statusbar
 
 set formatoptions-=l
-set shortmess+=I
+"set shortmess+=I                " Don't give the intro message when starting VIM
 
 set rulerformat=%l,%c%V%=#%n\ %3p%%         " Content of the ruler string
-set switchbuf=useopen,split  " Method of opening file in quickfix
+set switchbuf=usetab,newtab  " Method of opening file in quickfix
+set shell=/bin/bash
 
+" Backups
+set backupdir=~/.vim/tmp/backup// " backups
+set directory=~/.vim/tmp/swap//   " swap files
+set backup                        " enable backups
 
-syntax on                       " wlacza kolorowanie skladni
-set hlsearch                    " wlacza kolorowanie przy szukaniu
-"colorscheme elflord             " schemat kolorkow, jest tez duzo innych
+autocmd FileType text setlocal textwidth=80
 
-" wlacza automatyczne robienie wciec na podstawie typu pliku
-
-" dla plikow tekstowych wlacza zawijanie wiersz po 78 znaku
-autocmd FileType text setlocal textwidth=78
-
-" nie pamietam :)
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
 
-" laduje plugin Man - "K" uruchamia man dla wyrazu pod kursorem
+" Man plugin - "K" runs man for word under cursor.
 source $VIMRUNTIME/ftplugin/man.vim
 
-" ***************
-"  Abbreviations
-" ***************
-"  Some C abbreviations
-iab  Zmain  int main(int argc, char *argv[])<CR>{<CR>}<Up><CR><CR>return 0;<Up>
-iab  Zinc  #include
-iab  Zdef  #define
-"  Some other abbreviations
-iab  Zdate  <C-R>=strftime("%y%m%d")<CR>
-iab  Ztime  <C-R>=strftime("%H:%M:%S")<CR>
-iab  Zfilename <C-R>=expand("%:t:r")<CR>
-iab  Zfilepath <C-R>=expand("%:p")<CR>
-" ***************
-"  Skroty
-" ***************
+" From an idea by Michael Naumann
+" In visual mode when you press * or # to search for the current selection
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
 
-" F11 wlacza i wylacza tryb paste
+function! CmdLine(str)
+  exe "menu Foo.Bar :" . a:str
+  emenu Foo.Bar
+  unmenu Foo
+endfunction
 
+function! VisualSearch(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+" F11 switches paste on and off
 set pastetoggle=<F11>
 set wmh=0
-map <C-N> <C-W>j<C-W>_
-map <C-E> <C-W>k<C-W>_
-map <C-H> :tabprevious<CR>
-imap <C-H> <ESC>:tabprevious<CR>
-map <C-L> :tabnext<CR>
-imap <C-L> <ESC>:tabnext<CR>
-map <C-C> <C-W>c
 "make + bledy
 nmap <F5> :cnext<CR>
 imap <F5> <ESC>:cnext<CR>
 nmap <F6> :cprevious<CR>
 imap <F6> <ESC>:cprevious<CR>
-nmap <F7> :!php -l %<CR>
-imap <F7> <ESC>:php -l %<CR>
+map <F7> :call SpellLang()<CR>
+imap <F7> <C-o>:call SpellLang()<CR>
 " F8 uruchamia make w aktualnym katalogu
 ":command -nargs=* Make make <args> | cwindow 3
 :command -nargs=* Make make<args>
 map <F8> :Make -j4<CR>
-map <silent> <F9> :NERDTreeToggle<CR>
-imap <silent> <F9> <ESC>:NERDTreeToggle<CR>
+
 map  <silent> <F10> :TlistToggle<CR>
 imap <silent> <F10> <ESC>:TalistToggle<CR>
-" nmap <F12> :call SwitchPaste()<CR>
-" imap <F12> <ESC>:call SwitchPaste()<CR>
 nmap <F12> :call SwitchMouse()<CR>
 imap <F12> <ESC>:call SwitchMouse()<CR>
 map <F4> :set nu! <CR>
 map <F3> :set hls!<bar>set hls?<CR>
-:map gf <C-W><C-F><C-W>_
-
-" ***************
-"  Funkcje
-" ***************
+map <silent> <Leader>nt :NERDTreeToggle<CR>
 
 " function used to switch mouse on and off
-function SwitchMouse()
+function! SwitchMouse()
  if &mouse == "a"
   set mouse=
   echo "Mouse OFF"
@@ -137,7 +180,7 @@ function! s:insert_gates()
     execute "normal Go#endif /* " . gatename . " */"
     normal kk
 endfunction
-autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates() 
+autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates()
 
 " appropiate MAN pages
 " if we are in C/C++ file set browsed man sections to useful for programmist,
@@ -145,37 +188,19 @@ autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates()
 autocmd FileType c,cpp  let $MANSECT="2:3:7:4"
 autocmd FileType sh,csh let $MANSECT="1:5:8:4"
 
-set tags+=~/.vim/systags
-set dictionary+=~/.vim/dictionary/tex_dict
-
-" taken from Damien Conway, after OSCON2008 presentation
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-
-nnoremap v <C-V>
-nnoremap <C-V> v
-
-" Make BS/DEL work as expected in visual modes
-vmap <BS> x
-
-" Forward/back one file
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Execute current paragraph or visual block as Vimmish commands...
-
 vmap <silent> <C-E> :<C-U>'<,'>! cheddar<CR>
 " map <C-M> :%! headache<CR>
-map <silent> =e :call DemoCommand()<CR>
-vmap <silent> =e :<C-U>call DemoCommand(1)<CR>
+" Execute current paragraph or visual block as Vimmish commands...
+map <silent> <Leader>e :call DemoCommand(1)<CR>
+vmap <silent> <Leader>e :<C-U>call DemoCommand(1)<CR>
 
-highlight WHITE_ON_RED    ctermfg=white  ctermbg=red
+highlight link ERROR_COLOR Error
 
 function! DemoCommand (...)
      " Cache current state info...
      let orig_buffer = getline('w0','w$')
      let orig_match  = matcharg(1)
+     set nolazyredraw
 
      " Grab either visual blocj (if a:0) or else current para...
      if a:0
@@ -184,118 +209,116 @@ function! DemoCommand (...)
          silent normal vipy
      endif
 
-     " Highlight the selected text using match #1...
-     "match WHITE_ON_RED /\%V/
-     redraw
-     sleep 500m
+     " Highlight the selection in red to give feedback...
+    let matchid = matchadd('ERROR_COLOR','\%V')
+    redraw
+    sleep 500m
 
-     " Join up \-continued lines...
-     execute substitute(@@, '\n\s*\\', ' ', 'g')
+    " Remove continuations and convert shell commands, then execute...
+    let command = @@
+    let command = substitute(command, '^\s*".\{-}\n', '', 'g')
+    let command = substitute(command, '\n\s*\\', ' ', 'g')
+    let command = substitute(command, '^\s*>\s', ':! ', '' )
+    execute command
 
-     " Redraw if screen got messed up...
-     if getline('w0','w$') != orig_buffer
-         redraw
-         sleep 1000m
-     endif
+    " If the buffer changed, hold the highlighting an extra second...
+    if getline('w0','w$') != orig_buffer
+        redraw
+        sleep 1000m
+    endif
 
-     " Restore previous match #1 state...
-     "if strlen(orig_match[0])
-     "    execute 'match ' . orig_match[0] . ' /' . orig_match[1] . '/'
-     "else
-     "    match none
-     "endif
+    " Remove the highlighting...
+    call matchdelete(matchid)
 endfunction
 
-""" smart TAB, completes code or indents code *****************
-
-function! TabOrCompletion()
-	let c = col('.') - 1
-	if c==0 || getline('.')[c - 1] !~ '\k'
-		return "\<TAB>"
-	else
-		return "\<C-N>"
-	endif
-endfunction
-
-function! HelloWorld()
-	return "hello world"
-endfunction
-
-inoremap <expr> <TAB> TabOrCompletion()
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""" display help in tabs *****************
-
-"augroup HelpInTabs
-"	au!
-"	au BufEnter *.txt if &buftype == 'help'
-"	au BufEnter *.txt    normal ^WT
-"	au BufEnter *.txt endif
-"	au BufEnter *.txt cmap hhh helpg
-"augroup END
-
-"seems to doesn't work :((
-
-"""""""""""""""""""""""""*****************
-
-function! CommasToBullets()
+unction! CommasToBullets()
 perl <<END_PERL
-	($line) = $curwin->Cursor;
-	$curbuf->Append($line, map "\t* $_",
-				map { /^\s*(.*?)\s*$/ ? $1 : $_ }
-					split /,\s*/,
-						$curbuf->Get($line));
-	$curbuf->Delete($line);
+  ($line) = $curwin->Cursor;
+  $curbuf->Append($line, map "\t* $_",
+    map { /^\s*(.*?)\s*$/ ? $1 : $_ }
+    split /,\s*/,
+    $curbuf->Get($line));
+  $curbuf->Delete($line);
 END_PERL
 endfunction
 
-"function! SwitchNERDTree()
-"	:NERDTreeToggle
-"endfunction
-"
-"function! SwitchTagList()
-"	:TlistToggle
-"endfunction
-
 nmap =b :call CommasToBullets()<CR><CR>
 
-"http://cloudhead.io/2010/04/24/staying-the-hell-out-of-insert-mode/
-" inoremap nn <Esc>
-
-set t_Co=256                                                                                                       
-autocmd VimEnter * :GuiColorScheme dw_green
-
-" omni completion
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+" set a colorscheme
+set t_Co=256
+colorscheme wombat256mod
 
 " file type specifics
 au BufRead,BufNewFile *.go set filetype=go
 autocmd BufNewFile  *.go	0r ~/.vim/skel/skeleton.go
-autocmd BufRead,BufNewFile,BufEnter *.go source ~/.vim/ftype/go.vim
-
 autocmd BufNewFile  *.py	0r ~/.vim/skel/skeleton.py
-autocmd BufRead,BufNewFile,BufEnter *.py source ~/.vim/ftype/py.vim
-
 autocmd BufNewFile  *.php	0r ~/.vim/skel/skeleton.php
-autocmd BufRead,BufNewFile,BufEnter *.php source ~/.vim/ftype/php.vim
+au VimLeave * mksession ~/.vimsession
 
-autocmd BufRead,BufNewFile,BufEnter *.c source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.cc source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.cpp source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.h source ~/.vim/ftype/c.vim
-autocmd BufRead,BufNewFile,BufEnter *.hpp source ~/.vim/ftype/c.vim
+" A spell checker
+let g:myLangList = [ "nospell", "en_us" ]
 
-noremap n j
-noremap e k
-noremap s h
-noremap t l
+function! SpellLang()
+  if !exists( "b:myLang" )
+    let b:myLang=0
+  endif
 
-nnoremap k n
-nnoremap K N
-nnoremap h s
+  let b:myLang = b:myLang + 1
+  if b:myLang >= len(g:myLangList) | let b:myLang = 0 | endif
 
+  if b:myLang == 0 | set nospell | endif
+  if b:myLang == 1 | setlocal spell spelllang=en_us | endif
 
+  echo "language:" g:myLangList[b:myLang]
+endf
 
+" Add g as default to all :s commands.
+set gdefault
+
+" Show tabline with tab number, skip directory
+if exists("+guioptions")
+  set go-=e
+endif
+if exists("+showtabline")
+  function! MyTabLine()
+    let s = ''
+    let t = tabpagenr()
+    let i = 1
+    while i <= tabpagenr('$')
+      let buflist = tabpagebuflist(i)
+      let winnr = tabpagewinnr(i)
+      let s .= '%' . i . 'T'
+      let s .= (i == t ? '%1*' : '%2*')
+      let s .= '%*'
+      let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+      let s .= ' '
+      let file = bufname(buflist[winnr - 1])
+      let file = fnamemodify(file, ':p:t')
+      if file == ''
+        let file = '[No Name]'
+      endif
+      let s .= file
+      let i = i + 1
+    endwhile
+    let s .= '%T%#TabLineFill#%='
+    let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+    return s
+  endfunction
+  set stal=2
+  set tabline=%!MyTabLine()
+endif
+
+" Keep number column as small as possible.
+set numberwidth=1
+
+" Nice menu for completions above command line.
+set wildmenu
+nm ,o :tabe 
+
+"cnoremap <silent> <Esc> <C-F>
+"cnoremap <silent> <`> <C-F>
+
+" Map these to something more practical.
+noremap '' ``
+noremap Y y$
+noremap Q @q

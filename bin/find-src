@@ -10,4 +10,17 @@ what=$1
 #echo "dir= $dir"
 #echo "what=$what"
 
-find $dir -name '*.py' -o -name '*.cc' -o -name '*.c' -o -name '*.C' -o -name '*.go' -o -name '*.h' -o -name '*.php' -o -name '*.inc' | xargs grep -n --color $what
+RC=$(echo -e $LIGHT_RED);
+GC=$(echo -e $GREEN);
+YC=$(echo -e $YELLOW);
+PC=$(echo -e $PURPLE);
+NC=$(echo -e $NO_COLOR);
+
+find $dir -name '*.py' -o -name '*.cc' -o -name '*.c' -o -name '*.C' -o -name '*.go' \
+    -o -name '*.h' -o -name '*.php' -o -name '*.inc' -o -name '*.java' \
+    | xargs grep -n $what \
+    | sed "s/^\([^:]*\):/$PC\1$NC:/" \
+    | sed "s/:\([0-9]\+\):/ $GC+\1$NC:/" \
+    | sed "s/\($what\)/$RC\1$NC/"
+
+

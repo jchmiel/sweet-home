@@ -1,3 +1,6 @@
+iab  Zmain  int main(int argc, char *argv[])<CR>{<CR>}<Up><CR><CR>return 0;<Up>
+iab  Zinc  #include
+iab  Zdef  #define
 iab  Zc <CR><CR><CR><CR>};<Up>private:<Up>public:<Up>{<Up>class
 iab  Zfi for(i=0; i < ; i++)<CR>{<CR>}<Up><Up><Right><Right><Right><Right><Right><Right>
 iab  Zfii for(ii=vec.begin(); ii < vec.end(); ii++)<CR>{<CR>}<Up><Up><Right><Right><Right><Right><Right><Right>

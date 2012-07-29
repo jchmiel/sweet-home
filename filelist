@@ -7,3 +7,6 @@ bin/kloc	bin/kloc
 bin/psf	bin/psf
 vimrc	.vimrc
 vim	.vim
+bash	bash
+minimal.vimrc	.minimal.vimrc
+zshrc	.zshrc

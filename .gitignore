@@ -1,0 +1,5 @@
+vim/bundle
+vim/custom.bundle*
+vim/.netrwhist
+vim/tmp/*
+vim/Session.vim
