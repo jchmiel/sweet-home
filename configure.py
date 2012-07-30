@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-import configparser
+# Easy configuration installer.
+# Author: Jan Chmiel <chmiel.jan@gmail.com>.
+
 import glob
 import hashlib
 import logging
@@ -7,11 +9,17 @@ import optparse
 import os
 import time
 
+# See http://python3porting.com/noconv.html.
+try:
+  import configparser
+except ImportError:
+  import ConfigParser as configparser
 
-DEF_CONFIG_FILE='configure.conf'
+
+DEF_CONFIG_FILE = 'configure.conf'
 
 
-class Colors:
+class Colors(object):
   HEADER = '\033[95m'
   OKBLUE = '\033[94m'
   OKGREEN = '\033[92m'
@@ -24,13 +32,13 @@ class Error(Exception):
   pass
 
 
-class PathToLink:
+class PathToLink(object):
   def __init__(self, path, dest_path):
     self.path = path
     self.dest_path = dest_path
 
 
-class Configurer:
+class Configurer(object):
 
   def __init__(self, config_file, target_dir=None):
     self.config_file = config_file
@@ -51,7 +59,7 @@ class Configurer:
         raise Error('Path %s doesn\'t exist' % entry.path)
 
   def _link_paths(self, path_list, backup_dir):
-    print('%sLinking paths...%s' % (Colors.OKBLUE,  Colors.ENDC))
+    print('%sLinking paths...%s' % (Colors.OKBLUE, Colors.ENDC))
     backups = []
     for entry in path_list:
       dest_path = os.path.join(self.target_dir, entry.dest_path)
@@ -110,7 +118,7 @@ class Configurer:
     return path_list
 
   def _make_backup_dir(self):
-    dirname=hashlib.md5(str(time.time()).encode('utf-8')).hexdigest()
+    dirname = hashlib.md5(str(time.time()).encode()).hexdigest()
     backup_dir = os.path.join(self.target_dir, '.sweet-home')
     if not os.path.exists(backup_dir):
       os.mkdir(backup_dir)
