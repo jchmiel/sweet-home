@@ -1,7 +1,6 @@
 setopt promptsubst
 
 bindkey -v
-bindkey '^?' backward-delete-char
 bindkey -M vicmd 'R' custom-vi-replace
 
 function custom-vi-replace {
@@ -40,6 +39,19 @@ bindkey -M vicmd '^E' end-of-line
 bindkey -M viins '^A' beginning-of-line
 bindkey -M viins '^E' end-of-line
 bindkey -M vicmd v edit-command-line
+bindkey -M viins "^[b" backward-word
+bindkey -M vicmd "^[b" backward-word
+bindkey -M viins "^[f" forward-word 
+bindkey -M vicmd "^[f" forward-word 
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+bindkey -M emacs "^r" history-incremental-search-backward
+bindkey -M viins "^[d" kill-word
+bindkey -M vicmd "^[d" kill-word
+bindkey -M viins "^u" backward-kill-line
+bindkey -M vicmd "^u" backward-kill-line
+bindkey -M viins "^w" backward-kill-word
+bindkey -M vicmd "^w" backward-kill-word
 
 bindkey "\e[1~" beginning-of-line # Home
 bindkey "\e[4~" end-of-line # End
@@ -53,7 +65,6 @@ bindkey -M vicmd "^[F" bash-forward-word
 bindkey -M viins "^[F" bash-forward-word
 
 
-bindkey "^R" history-incremental-search-backward
 # Use vim to edit long lines.
 autoload edit-command-line
 zle -N edit-command-line
@@ -67,7 +78,7 @@ setopt completealiases
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
-autoload -U compinit
+autoload -Uz compinit
 compinit
 # Make git completion working for 'g'.
 compdef _git g=git
@@ -76,11 +87,15 @@ compdef _git gc=git-checkout
 zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
 
-setopt autocd
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=100000
+setopt appendhistory autocd extendedglob nomatch notify
 
 # Execute everything in .zsh directory.
 if [ -e $HOME/.zsh ]; then
   for sc in $HOME/.zsh/* ; do
+    echo 'Executing' $sc
     . $sc
   done
 fi

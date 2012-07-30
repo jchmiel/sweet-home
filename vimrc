@@ -254,8 +254,6 @@ endfunction
 
 nmap =b :call CommasToBullets()<CR><CR>
 
-" </DCONWAY-OSCON2008>
-
 " set a colorscheme
 set t_Co=256
 colorscheme wombat256mod
@@ -265,7 +263,6 @@ au BufRead,BufNewFile *.go set filetype=go
 autocmd BufNewFile  *.go	0r ~/.vim/skel/skeleton.go
 autocmd BufNewFile  *.py	0r ~/.vim/skel/skeleton.py
 autocmd BufNewFile  *.php	0r ~/.vim/skel/skeleton.php
-
 au VimLeave * mksession ~/.vimsession
 
 " A spell checker
