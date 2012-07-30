@@ -39,6 +39,7 @@ bindkey -M vicmd '^A' beginning-of-line
 bindkey -M vicmd '^E' end-of-line
 bindkey -M viins '^A' beginning-of-line
 bindkey -M viins '^E' end-of-line
+bindkey -M vicmd v edit-command-line
 
 bindkey "\e[1~" beginning-of-line # Home
 bindkey "\e[4~" end-of-line # End
@@ -46,6 +47,11 @@ bindkey "^[OH" beginning-of-line # Home
 bindkey "^[OF" end-of-line # End
 bindkey "^[OI" history-beginning-search-backward
 bindkey "^[OG" history-beginning-search-forward
+bindkey -M vicmd "^[B" bash-backward-word
+bindkey -M viins "^[B" bash-backward-word
+bindkey -M vicmd "^[F" bash-forward-word
+bindkey -M viins "^[F" bash-forward-word
+
 
 bindkey "^R" history-incremental-search-backward
 # Use vim to edit long lines.
@@ -59,10 +65,13 @@ zle -N self-insert url-quote-magic
 
 setopt completealiases
 
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
 autoload -U compinit
 compinit
 # Make git completion working for 'g'.
 compdef _git g=git
+compdef _git gc=git-checkout
 
 zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'

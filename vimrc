@@ -16,18 +16,24 @@ Bundle 'gmarik/vundle'
 let g:gundo_map_move_older = "k"
 let g:gundo_map_move_newer = "h"
 
+let g:pyflakes_use_quickfix = 0
+
 " Load the  plugins.
 Bundle 'Command-T'
-Bundle 'corntrace/bufexplorer'
-Bundle 'ervandew/supertab'
 Bundle 'Gundo'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Lokaltog/vim-powerline'
-Bundle 'scrooloose/nerdcommenter'
 Bundle 'The-NERD-tree'
+Bundle 'TortoiseTyping'
+Bundle 'corntrace/bufexplorer'
+Bundle 'ervandew/supertab'
+Bundle 'pyflakes.vim'
+Bundle 'quickfixsigns'
+Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'wgibbs/vim-irblack'
+Bundle 'grep.vim'
 
 filetype plugin on
 filetype indent on
@@ -37,12 +43,12 @@ set rtp+=~/.vim/custom.bundle/\*
 
 " Set leader for easymotion plugin.
 " Easy motion sets far too many mappings. Move them to some key and
-" leave only useful ones with <Leader>.
-let g:EasyMotion_leader_key ='<Space>'
+" leave only useful ones with <Space>.
+let g:EasyMotion_leader_key ='\'
 let g:EasyMotion_mapping_k = '<Space>h'
 let g:EasyMotion_mapping_j = '<Space>k'
 let g:EasyMotion_mapping_f = '<Space>f'
-let g:EasyMotion_mapping_F = '<Space>F'
+let g:EasyMotion_mapping_F = '<Space>e'
 let g:EasyMotion_mapping_w = '<Space>w'
 let g:EasyMotion_mapping_W = '<Space>W'
 
@@ -65,11 +71,10 @@ map <Leader>u :GundoToggle<CR>
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source ~/.vimrc
 
-
 set backspace=indent,eol,start
 set mouse=a
 set confirm                     " Ask for confirmation rather then refuse certain commands
-set history=500                 " Keep 50 lines of command line history
+set history=500                 " Keep 500 lines of command line history
 set ruler                       " Show the cursor position all the time
 set showcmd                     " Display incomplete commands
 set scrolloff=3                 " Scrolling margin
@@ -98,7 +103,6 @@ set directory=~/.vim/tmp/swap//   " swap files
 set backup                        " enable backups
 
 autocmd FileType text setlocal textwidth=80
-
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
@@ -141,12 +145,13 @@ endfunction
 set pastetoggle=<F11>
 set wmh=0
 "make + bledy
+imap <F1> <c-o>:call SpellLang()<CR>
 nmap <F5> :cnext<CR>
 imap <F5> <ESC>:cnext<CR>
 nmap <F6> :cprevious<CR>
 imap <F6> <ESC>:cprevious<CR>
-map <F7> :call SpellLang()<CR>
-imap <F7> <C-o>:call SpellLang()<CR>
+imap <silent> <F7> <c-o>:copen<CR>
+map <silent> <F7> :copen<CR>
 " F8 uruchamia make w aktualnym katalogu
 ":command -nargs=* Make make <args> | cwindow 3
 :command -nargs=* Make make<args>
@@ -157,8 +162,13 @@ imap <silent> <F10> <ESC>:TalistToggle<CR>
 nmap <F12> :call SwitchMouse()<CR>
 imap <F12> <ESC>:call SwitchMouse()<CR>
 map <F4> :set nu! <CR>
-map <F3> :set hls!<bar>set hls?<CR>
+map <F3> :Bgrep 
+imap <F3> <ESC>:Bgrep 
 map <silent> <Leader>nt :NERDTreeToggle<CR>
+imap <Leader>gg <ESC>:Ggrep 
+map <Leader>gg :Ggrep 
+imap <Leader>gb <ESC>:Bgrep 
+map <Leader>gb :Bgrep 
 
 " function used to switch mouse on and off
 function! SwitchMouse()
@@ -316,7 +326,7 @@ set numberwidth=1
 
 " Nice menu for completions above command line.
 set wildmenu
-nm ,o :tabe 
+nm ,o :tabe
 
 "cnoremap <silent> <Esc> <C-F>
 "cnoremap <silent> <`> <C-F>
@@ -325,3 +335,26 @@ nm ,o :tabe
 noremap '' ``
 noremap Y y$
 noremap Q @q
+
+" Check periodically if the buffers were changed on disk.
+set updatetime=2000
+autocmd CursorHold * checktime
+iab Zt #TODO(jchmiel):
+
+" Toggle for quickfix window
+command -bang -nargs=? QFix call QFixToggle(<bang>0)
+function! QFixToggle(forced)
+  if exists("g:qfix_win") && a:forced == 0
+    cclose
+  else
+    copen
+  endif
+endfunction
+
+" used to track the quickfix window
+augroup QFixToggle
+ autocmd!
+ autocmd BufWinEnter quickfix let g:qfix_win = bufnr("$")
+ autocmd BufWinLeave * if exists("g:qfix_win") && expand("<abuf>") == g:qfix_win | unlet! g:qfix_win | endif
+augroup END
+""""""""""""""""""""""""""""""
