@@ -97,6 +97,7 @@ class Configurer(object):
     if not os.path.exists(src):
       return False
     dest = os.path.join(backup_dir, path)
+    self._make_parent_dir(dest)
     os.rename(src, dest)
     return True
 
