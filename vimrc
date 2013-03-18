@@ -3,7 +3,7 @@
 " Some tricks taken from amix http://amix.dk/vim/vimrc.html
 " and http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
-source ~/.minimal.vimrc
+source ~/.vimrc.minimal
 " Clear colorscheme set in minimal.vimrc
 highlight clear
 
@@ -18,22 +18,25 @@ let g:gundo_map_move_newer = "h"
 
 let g:pyflakes_use_quickfix = 0
 
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplSplitToEdge = 1
+let g:miniBufExplSplitBelow=0
+
 " Load the  plugins.
 Bundle 'Command-T'
 Bundle 'Gundo'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'The-NERD-tree'
-Bundle 'TortoiseTyping'
 Bundle 'corntrace/bufexplorer'
 Bundle 'ervandew/supertab'
 Bundle 'pyflakes.vim'
-Bundle 'quickfixsigns'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'wgibbs/vim-irblack'
 Bundle 'grep.vim'
+Bundle 'fholgado/minibufexpl.vim'
 
 filetype plugin on
 filetype indent on
@@ -52,8 +55,7 @@ let g:EasyMotion_mapping_F = '<Space>e'
 let g:EasyMotion_mapping_w = '<Space>w'
 let g:EasyMotion_mapping_W = '<Space>W'
 
-let g:CommandTAcceptSelectionTabMap='<CR>'
-let g:CommandTAcceptSelectionMap='<Space>'
+let g:CommandTAcceptSelectionMap=['<Space>', '<CR>']
 let g:CommandTAcceptSelectionSplitMap='<C-w>'
 let g:CommandTCancelMap=['<ESC>', '`']
 let g:CommandTSelectPrevMap=['<C-TAB>', '<C-p>']
@@ -61,11 +63,18 @@ let g:CommandTSelectNextMap=['<TAB>', '<C-n>']
 let g:CommandTToggleFocusMap='<C-f>'
 let g:CommandTMaxFiles=20000
 
+" As we have minibufexpl C-K, C-H can be used to switch buffers not tabs.
+noremap <C-K> :bn<CR>
+noremap <C-H> :bp<CR>
+noremap <C-c> :bd<CR>
+nmap <Leader>w :w!<cr>
+
+
 " Leader mappings
 " Fast saving.
 nmap <Leader>w :w!<cr>
 " Fast editing of the .vimrc.
-map <Leader>v :tabe! ~/.vimrc<cr>
+map <Leader>v :e ~/.vimrc<cr>
 map <Leader>u :GundoToggle<CR>
 
 " When vimrc is edited, reload it
@@ -83,6 +92,8 @@ set nowrap                      " Don't wrap
 set number                      " Line numbers are useful
 set showmatch                   " When a bracket is inserted, briefly jump to the matching one
 set foldenable                  " Make folding possible
+set foldmethod=indent
+set foldlevel=99
 set splitbelow                  " Create new window below current one
 set previewheight=6             " Height of the quickfix window
 set title                       " Puts name of edited file into window title (xterm, putty, etc.)
@@ -91,10 +102,10 @@ set lazyredraw                  " Don't update screen while executing macros
 set laststatus=2                " Always show statusbar
 
 set formatoptions-=l
-"set shortmess+=I                " Don't give the intro message when starting VIM
+"set shortmess+=I               " Don't give the intro message when starting VIM
 
 set rulerformat=%l,%c%V%=#%n\ %3p%%         " Content of the ruler string
-set switchbuf=usetab,newtab  " Method of opening file in quickfix
+set switchbuf=useopen           " Method of opening file in quickfix
 set shell=/bin/bash
 
 " Backups
@@ -169,6 +180,9 @@ imap <Leader>gg <ESC>:Ggrep
 map <Leader>gg :Ggrep 
 imap <Leader>gb <ESC>:Bgrep 
 map <Leader>gb :Bgrep 
+" A 'refactor' mapping. Replace a word under the cursor.
+noremap <leader>r :%s/\<<C-R><C-W>\>/
+vnoremap <leader>r :s/\<<C-R><C-W>\>/
 
 " function used to switch mouse on and off
 function! SwitchMouse()
@@ -198,8 +212,9 @@ autocmd  BufNewFile *.{h,hpp} call <SID>insert_gates()
 autocmd FileType c,cpp  let $MANSECT="2:3:7:4"
 autocmd FileType sh,csh let $MANSECT="1:5:8:4"
 
+" Custom scripts
 vmap <silent> <C-E> :<C-U>'<,'>! cheddar<CR>
-" map <C-M> :%! headache<CR>
+map <silent> <Leader>i :%! importer<CR>
 " Execute current paragraph or visual block as Vimmish commands...
 map <silent> <Leader>e :call DemoCommand(1)<CR>
 vmap <silent> <Leader>e :<C-U>call DemoCommand(1)<CR>
@@ -323,7 +338,7 @@ set numberwidth=1
 
 " Nice menu for completions above command line.
 set wildmenu
-nm ,o :tabe
+nm ,o :e 
 
 "cnoremap <silent> <Esc> <C-F>
 "cnoremap <silent> <`> <C-F>
@@ -336,7 +351,6 @@ noremap Q @q
 " Check periodically if the buffers were changed on disk.
 set updatetime=2000
 autocmd CursorHold * checktime
-iab Zt #TODO(jchmiel):
 
 " Toggle for quickfix window
 command -bang -nargs=? QFix call QFixToggle(<bang>0)

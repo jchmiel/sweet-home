@@ -11,6 +11,7 @@ alias aptr='sudo apt-get --purge remove'
 
 # Other ones useful too.
 alias grep='grep --color=auto'
+alias gr='grep --color=auto'
 alias pg='ping google.com'
 alias r='sudo su -'
 alias df='df -h'
@@ -21,13 +22,9 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
-alias od='popd'
-alias pd='pushd'
-alias v='vim'
-alias vs="vim -S $HOME/.vimsession"
-alias cls=clear
 alias g='git'
 alias gb='git branch'
+alias gsh='git show'
 alias gs='git status'
 alias gc='git checkout'
 alias gcb='git checkout -b'
@@ -36,6 +33,13 @@ alias gci='git commit'
 alias gd='git --no-pager diff'
 alias gl='git --no-pager log --pretty=oneline -n25 --abbrev-commit'
 alias gg='git --no-pager grep -n -H'
-alias tf='tail -f'
 
 alias vmore "vim -u ~/.vimrc.more -"
+alias od='popd'
+alias pd='pushd'
+alias v='vim'
+alias vs="vim -S $HOME/.vimsession"
+alias cls=clear
+alias gr=grep --color=auto
+alias tf='tail -f'
+alias wg=wget

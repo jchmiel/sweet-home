@@ -1,9 +1,14 @@
-iab  Zf for in :<Left><Left><Left>
-iab  Zfi for i in xrange():<Left><Left>
-iab  Zw while :<Left>
-iab  Zi if :<Left>
-iab  Zfu def ():<Left><Left><Left>
-iab  Zc class :<CR>def __init__(self):<CR>pass<UP><UP><Left>
+iab Zc class :<CR>def __init__(self):<CR>pass<UP><UP><Left>
+iab Zf for in :<CR><Up><Right><Right>
+iab Zfi for i in xrange():<Left><Left>
+iab Zfu def ():<Left><Left><Left>
+iab Zi if :<Left>
+iab Zm def (self):<CR><Up><Right><Right>
+iab Zw while :<Left>
+iab Zmain def main():<CR>pass<CR><CR>if __name__ == '__main__':<CR>main()<CR><Up><Up><Up><Up><Esc><Right>
+iab Zt # TODO(jchmiel): 
+iab Zte try:<CR>pass<CR>except
+
 
 setlocal softtabstop=2
 setlocal tabstop=2

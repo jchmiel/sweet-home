@@ -7,4 +7,3 @@ if [ -e $HOME/bash ]; then
     . $sc
   done
 fi
-

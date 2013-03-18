@@ -9,3 +9,4 @@ iab  Zie if () {<CR>} else {<CR>}<CR><Up><Up><Up><Right><Right><Right><Right>
 iab  Zfu public void () {<CR>}<Up><Right><Right><Right><Right>
 iab  Zfus public static void () {<CR>}<Up><Right><Right><Right><Right><Right><Right><Right><Right><Right><Right><Right>
 iab  Zs switch()<CR>{<CR>case<CR>break;<CR>}<Up><Up><Up><Right><Right><Right><Right><Right><Right>
+iab Zt // TODO(jchmiel): 
