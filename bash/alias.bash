@@ -33,7 +33,7 @@ alias gci='git commit'
 alias gd='git --no-pager diff'
 alias gl='git --no-pager log --pretty=oneline -n25 --abbrev-commit'
 alias gg='git --no-pager grep -n -H'
-alias vmore "vim -u ~/.vimrc.more -"
+alias vmore="vim -u ~/.vimrc.more -"
 alias od='popd'
 alias pd='pushd'
 alias v='vim'
