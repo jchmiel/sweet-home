@@ -3,7 +3,7 @@
 " Some tricks taken from amix http://amix.dk/vim/vimrc.html
 " and http://bitbucket.org/sjl/dotfiles/src/tip/vim/
 
-source ~/.minimal.vimrc
+source ~/.vimrc.minimal
 " Clear colorscheme set in minimal.vimrc
 highlight clear
 

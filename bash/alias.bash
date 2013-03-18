@@ -37,5 +37,3 @@ alias gd='git --no-pager diff'
 alias gl='git --no-pager log --pretty=oneline -n25 --abbrev-commit'
 alias gg='git --no-pager grep -n -H'
 alias tf='tail -f'
-
-alias vmore "vim -u ~/.vimrc.more -"
