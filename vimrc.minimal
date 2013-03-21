@@ -18,9 +18,9 @@ inoremap ` <Esc>
 vnoremap ` <Esc>
 
 " For colemak keyboard
-noremap h k
-noremap j h
-noremap k j
+noremap h <Up>
+noremap j <Left>
+noremap k <Down>
 vmap <BS> <Left>
 
 noremap <Leader>a q:
