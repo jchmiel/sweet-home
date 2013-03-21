@@ -37,6 +37,9 @@ Bundle 'tpope/vim-surround'
 Bundle 'wgibbs/vim-irblack'
 Bundle 'grep.vim'
 Bundle 'fholgado/minibufexpl.vim'
+Bundle 'mru.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'maxbrunsfeld/vim-yankstack'
 
 filetype plugin on
 filetype indent on
@@ -44,10 +47,11 @@ filetype indent on
 "Add custom plugins
 set rtp+=~/.vim/custom.bundle/\*
 
+" Easy Motion plugin.
 " Set leader for easymotion plugin.
-" Easy motion sets far too many mappings. Move them to some key and
-" leave only useful ones with <Space>.
 let g:EasyMotion_leader_key ='\'
+" Easy motion sets far too many mappings,
+" leave only useful ones with <Space>.
 let g:EasyMotion_mapping_k = '<Space>h'
 let g:EasyMotion_mapping_j = '<Space>k'
 let g:EasyMotion_mapping_f = '<Space>f'
@@ -55,6 +59,7 @@ let g:EasyMotion_mapping_F = '<Space>e'
 let g:EasyMotion_mapping_w = '<Space>w'
 let g:EasyMotion_mapping_W = '<Space>W'
 
+" Command-T plugin.
 let g:CommandTAcceptSelectionMap=['<Space>', '<CR>']
 let g:CommandTAcceptSelectionSplitMap='<C-w>'
 let g:CommandTCancelMap=['<ESC>', '`']
@@ -63,12 +68,17 @@ let g:CommandTSelectNextMap=['<TAB>', '<C-n>']
 let g:CommandTToggleFocusMap='<C-f>'
 let g:CommandTMaxFiles=20000
 
+" CtrlP plugin
+let g:ctrlp_map = '<Leader>p'
+let g:ctrlp_cmd = 'CtrlP'
+
+" MRU plugin
+map <c-m> :MRU<CR>
+
 " As we have minibufexpl C-K, C-H can be used to switch buffers not tabs.
 noremap <C-K> :bn<CR>
 noremap <C-H> :bp<CR>
 noremap <C-c> :bd<CR>
-nmap <Leader>w :w!<cr>
-
 
 " Leader mappings
 " Fast saving.
@@ -369,3 +379,11 @@ augroup QFixToggle
  autocmd BufWinLeave * if exists("g:qfix_win") && expand("<abuf>") == g:qfix_win | unlet! g:qfix_win | endif
 augroup END
 """"""""""""""""""""""""""""""
+
+au WinLeave * set nocursorline nocursorcolumn
+au WinEnter * set cursorline cursorcolumn
+set cursorline cursorcolumn
+
+" YankStack config
+nmap <c-p> <Plug>yankstack_substitute_older_paste
+nmap <c-n> <Plug>yankstack_substitute_newer_paste
