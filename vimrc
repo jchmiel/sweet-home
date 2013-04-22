@@ -380,10 +380,6 @@ augroup QFixToggle
 augroup END
 """"""""""""""""""""""""""""""
 
-au WinLeave * set nocursorline nocursorcolumn
-au WinEnter * set cursorline cursorcolumn
-set cursorline cursorcolumn
-
 " YankStack config
 nmap <c-p> <Plug>yankstack_substitute_older_paste
 nmap <c-n> <Plug>yankstack_substitute_newer_paste
