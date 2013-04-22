@@ -162,8 +162,8 @@ function! VisualSearch(direction) range
     let @" = l:saved_reg
 endfunction
 
-" F11 switches paste on and off
-set pastetoggle=<F11>
+" F9 switches paste on and off
+set pastetoggle=<F9>
 set wmh=0
 "make + bledy
 imap <F1> <c-o>:call SpellLang()<CR>
