@@ -162,7 +162,7 @@ function! VisualSearch(direction) range
     let @" = l:saved_reg
 endfunction
 
-" F11 switches paste on and off
+" F9 switches paste on and off
 set pastetoggle=<F9>
 set wmh=0
 "make + bledy
@@ -379,10 +379,6 @@ augroup QFixToggle
  autocmd BufWinLeave * if exists("g:qfix_win") && expand("<abuf>") == g:qfix_win | unlet! g:qfix_win | endif
 augroup END
 """"""""""""""""""""""""""""""
-
-au WinLeave * set nocursorline nocursorcolumn
-au WinEnter * set cursorline cursorcolumn
-set cursorline cursorcolumn
 
 " YankStack config
 nmap <c-p> <Plug>yankstack_substitute_older_paste
