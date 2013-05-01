@@ -163,7 +163,7 @@ function! VisualSearch(direction) range
 endfunction
 
 " F11 switches paste on and off
-set pastetoggle=<F11>
+set pastetoggle=<F9>
 set wmh=0
 "make + bledy
 imap <F1> <c-o>:call SpellLang()<CR>
