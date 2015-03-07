@@ -10,7 +10,7 @@ create_link() {
     echo "Path $dest_path exists, cannot be linked."
     return
   fi
-  dest_path_dir=$(dirname /home/johnny/.zsh/functions.bash)
+  dest_path_dir=$(dirname "$dest_path")
   if [ ! -e "$dest_path_dir" ]; then
     cmd="mkdir -p $dest_path_dir"
     echo $cmd
