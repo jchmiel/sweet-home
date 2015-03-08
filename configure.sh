@@ -39,6 +39,7 @@ for x in ${files[@]}; do
 done
 
 echo
+# Initialize git submodules for vim vundle extension.
 echo "Updating git submodules..."
 run_cmd 'git submodule init'
 run_cmd 'git submodule update'
