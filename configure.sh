@@ -21,8 +21,15 @@ create_link() {
   eval "$cmd"
 }
 
+run_cmd() {
+  echo "$1"
+  $1
+}
+
 . ./configure.conf
 
+echo
+echo "Creating links to the config files..."
 for x in ${dotfiles[@]}; do
   create_link "$PWD/$x" "$HOME/.$x"
 done
@@ -30,3 +37,8 @@ done
 for x in ${files[@]}; do
   create_link "$PWD/$x" "$HOME/$x"
 done
+
+echo
+echo "Updating git submodules..."
+run_cmd 'git submodule init'
+run_cmd 'git submodule update'
