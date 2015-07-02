@@ -1,3 +1,5 @@
+#!/bin/bash
+
 create_link() {
   src_path=$1
   dest_path=$2
